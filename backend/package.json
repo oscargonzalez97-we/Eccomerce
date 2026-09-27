@@ -1,0 +1,29 @@
+{
+  "name": "ecommerce-backend",
+  "version": "1.0.0",
+  "description": "Backend de sistema de comercio electrónico con arquitectura hexagonal",
+  "main": "dist/main.js",
+  "scripts": {
+    "dev": "tsx watch src/main.ts",
+    "build": "tsc",
+    "start": "node dist/main.js"
+  },
+  "dependencies": {
+    "argon2": "^0.44.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.3",
+    "pg": "^8.16.3",
+    "zod": "^4.1.5"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^24.5.2",
+    "@types/pg": "^8.23.1",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2"
+  }
+}
