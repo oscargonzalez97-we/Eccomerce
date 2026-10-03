@@ -24,6 +24,8 @@ import { PedidoRepositoryPostgres } from "./infrastructure/repositories/PedidoRe
 
 import { Argon2PasswordHasher } from "./infrastructure/security/Argon2PasswordHasher.js";
 
+import { NodemailerEmailAdapter } from "./infrastructure/notifications/NodemailerEmailAdapter.js";
+
 
 const usuarioRepository =
   new UsuarioRepositoryPostgres();
@@ -36,6 +38,9 @@ const pedidoRepository =
 
 const passwordHasher =
   new Argon2PasswordHasher();
+  
+const emailNotifier =
+  new NodemailerEmailAdapter();
 
 export const useCases = {
   usuarios: {
@@ -91,7 +96,8 @@ export const useCases = {
     crear: new CrearPedido(
       pedidoRepository,
       productoRepository,
-      usuarioRepository
+      usuarioRepository,
+      emailNotifier
     ),
 
     obtenerTodos: new ObtenerPedidos(

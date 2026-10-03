@@ -7,6 +7,8 @@ import { PedidoRepository } from "../../ports/PedidoRepository.js";
 import { ProductoRepository } from "../../ports/ProductoRepository.js";
 import { UsuarioRepository } from "../../ports/UsuarioRepository.js";
 
+import { EmailNotifier } from "../../ports/EmailNotifier.js";
+
 export interface CrearPedidoProductoInput {
   productoId: number;
   cantidad: number;
@@ -21,7 +23,8 @@ export class CrearPedido {
   constructor(
     private readonly pedidoRepository: PedidoRepository,
     private readonly productoRepository: ProductoRepository,
-    private readonly usuarioRepository: UsuarioRepository
+    private readonly usuarioRepository: UsuarioRepository,
+    private readonly emailNotifier: EmailNotifier
   ) {}
 
   async execute(
@@ -125,8 +128,24 @@ export class CrearPedido {
     }
 
     /*
-     * 6. Guardar el pedido
-     */
-    return this.pedidoRepository.crear(pedido);
+ * 6. Guardar el pedido
+ */
+  const pedidoCreado =
+    await this.pedidoRepository.crear(pedido);
+    
+  /*
+   * 7. Enviar notificaciones
+   */
+  await this.emailNotifier.enviarConfirmacionPedido(
+    usuario,
+    pedidoCreado
+  );
+  
+  await this.emailNotifier.enviarNotificacionAdministrador(
+    usuario,
+    pedidoCreado
+  );
+  
+  return pedidoCreado;
   }
 }

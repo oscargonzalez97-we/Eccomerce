@@ -46,8 +46,9 @@ function LoginPage() {
       respuesta.usuario,
       respuesta.token
     );
-    
+
     navigate("/");
+    
     } catch (error: any) {
       setError(
         error.response?.data?.error ??
