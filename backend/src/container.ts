@@ -21,6 +21,8 @@ import { EliminarPedido } from "./application/use-cases/pedidos/EliminarPedido.j
 import { UsuarioRepositoryPostgres } from "./infrastructure/repositories/UsuarioRepositoryPostgres.js";
 import { ProductoRepositoryPostgres } from "./infrastructure/repositories/ProductoRepositoryPostgres.js";
 import { PedidoRepositoryPostgres } from "./infrastructure/repositories/PedidoRepositoryPostgres.js";
+import { AnalyticsRepositoryAdapter } from "./infrastructure/repositories/AnalyticsRepositoryAdapter.js";
+import { AnalyticsService } from "./application/use-cases/analytics/AnalyticsService.js";
 
 import { Argon2PasswordHasher } from "./infrastructure/security/Argon2PasswordHasher.js";
 
@@ -36,6 +38,12 @@ const productoRepository =
 const pedidoRepository =
   new PedidoRepositoryPostgres();
 
+const analyticsRepository =
+  new AnalyticsRepositoryAdapter();
+
+const analyticsService =
+  new AnalyticsService(analyticsRepository);
+
 const passwordHasher =
   new Argon2PasswordHasher();
   
@@ -43,6 +51,12 @@ const emailNotifier =
   new NodemailerEmailAdapter();
 
 export const useCases = {
+  analytics: {
+    resumenProductos: (limit: number, filters: import("./application/ports/AnalyticsRepository.js").AnalyticsFilters) => analyticsService.resumenProductos(limit, filters),
+    ingresos: (periodo: import("./application/ports/AnalyticsRepository.js").Granularity, filters: import("./application/ports/AnalyticsRepository.js").AnalyticsFilters) => analyticsService.ingresos(periodo, filters),
+    estadosPedidos: (filters: import("./application/ports/AnalyticsRepository.js").AnalyticsFilters) => analyticsService.estadosPedidos(filters),
+    ticketPromedio: (filters: import("./application/ports/AnalyticsRepository.js").AnalyticsFilters) => analyticsService.ticketPromedio(filters),
+  },
   usuarios: {
     crear: new CrearUsuario(
       usuarioRepository,

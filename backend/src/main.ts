@@ -7,6 +7,7 @@ import { testDatabaseConnection } from "./infrastructure/database/PostgresConnec
 import usuarioRoutes from "./infrastructure/http/routes/usuarioRoutes.js";
 import productoRoutes from "./infrastructure/http/routes/productoRoutes.js";
 import pedidoRoutes from "./infrastructure/http/routes/pedidoRoutes.js";
+import analyticsRoutes from "./infrastructure/http/routes/analyticsRoutes.js";
 
 dotenv.config();
 
@@ -58,6 +59,8 @@ app.use(
   pedidoRoutes
 );
 
+app.use("/api/analytics", analyticsRoutes);
+
 app.use(
   (
     _req,
@@ -90,6 +93,10 @@ async function main(): Promise<void> {
 
         console.log(
           `📋 API de pedidos: http://localhost:${PORT}/api/pedidos`
+        );
+
+        console.log(
+          `📊 API de analítica: http://localhost:${PORT}/api/analytics`
         );
       }
     );
